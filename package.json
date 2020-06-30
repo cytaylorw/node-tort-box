@@ -1,0 +1,23 @@
+{
+  "name": "tort-box",
+  "version": "1.0.0",
+  "description": "node-tort-box",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cytaylorw/node-tort-box.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cytaylorw/node-tort-box/issues"
+  },
+  "homepage": "https://github.com/cytaylorw/node-tort-box#readme",
+  "dependencies": {
+    "async-mqtt": "^2.6.1",
+    "node-dht-sensor": "^0.4.2"
+  }
+}
