@@ -4,7 +4,8 @@
   "description": "node-tort-box",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "TEST=1 node index.js",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
