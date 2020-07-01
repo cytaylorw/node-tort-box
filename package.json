@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "TEST=1 node index.js",
+    "production": "ENV=production TEST=1 node index.js",
+    "silent": "SILENT=1 node index.js",
     "start": "node index.js"
   },
   "repository": {
@@ -19,6 +21,8 @@
   "homepage": "https://github.com/cytaylorw/node-tort-box#readme",
   "dependencies": {
     "async-mqtt": "^2.6.1",
-    "node-dht-sensor": "^0.4.2"
+    "node-dht-sensor": "^0.4.2",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.0"
   }
 }

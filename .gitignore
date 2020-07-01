@@ -90,3 +90,4 @@ typings/
 # Config files
 dht.js
 mqtt.js
+logger.js

@@ -1,0 +1,11 @@
+module.exports = {
+    all: {
+        filename: 'all-%DATE%.log',
+        maxFiles: '7d'
+    },
+    error: {
+        filename: 'error-%DATE%.log',
+        maxFiles: '14d',
+        level: 'error' 
+    }
+}
