@@ -88,6 +88,4 @@ typings/
 .dynamodb/
 
 # Config files
-dht.js
-mqtt.js
-logger.js
+config/*.js
