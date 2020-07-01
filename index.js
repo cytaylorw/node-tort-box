@@ -17,7 +17,7 @@ dhtList.forEach(dht => {
             let message = JSON.stringify(data);
             mqtt.publish(topic,message)
                 .then(() => {
-                    loggers.mqtt.debug('Published message: %s to topic: %s', message, topic, {label: 'publish'});
+                    loggers.mqtt.silly('Published message: %s to topic: %s', message, topic, {label: 'publish'});
                 })
                 .catch(error => {
                     loggers.mqtt.error(new Error(error),{label: 'publish'});
