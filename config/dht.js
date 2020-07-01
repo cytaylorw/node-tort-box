@@ -3,7 +3,8 @@ module.exports = [
         name: 'test',
         type: 22,
         pin: 1,
-        interval: 3000
+        interval: 3000,
+        clientTime: true
     },
     {
         name: 'test2',
