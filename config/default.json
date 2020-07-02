@@ -1,0 +1,29 @@
+{
+    "dht": {
+        "defaultInterval": 2000,
+        "failureMultiplier": 2
+    },
+    "mqtt": {
+        "enable": false,
+        "options": {
+            "host": "localhost",
+            "port": 1883,
+            "username": "tortbox"
+        }
+    },
+    "logger": {
+        "all": {
+            "filename": "all-%DATE%.log",
+            "maxFiles": "7d"
+        },
+        "error": {
+            "filename": "error-%DATE%.log",
+            "maxFiles": "14d",
+            "level": "error" 
+        },
+        "console": {
+            "level": "info"
+        }
+    },
+    "sensors": []
+}
