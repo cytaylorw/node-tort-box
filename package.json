@@ -7,7 +7,9 @@
     "test": "TEST=1 node index.js",
     "production": "ENV=production TEST=1 node index.js",
     "silent": "SILENT=1 node index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -24,5 +26,13 @@
     "node-dht-sensor": "^0.4.2",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-node-externals": "^1.7.2"
   }
 }
