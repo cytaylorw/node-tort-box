@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=development TEST=1 node index.js",
-    "production": "NODE_ENV=production TEST=1 node index.js",
+    "production": "NODE_ENV=production node index.js",
     "silent": "SILENT=1 node index.js",
     "start": "node index.js",
     "dev": "webpack --mode development",

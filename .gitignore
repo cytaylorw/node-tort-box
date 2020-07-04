@@ -88,7 +88,7 @@ typings/
 .dynamodb/
 
 # Config files
-config/*.js
+tort*.config.json
 
 # Webpack files
 dist

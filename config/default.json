@@ -1,7 +1,8 @@
 {
     "dht": {
         "defaultInterval": 2000,
-        "failureMultiplier": 2
+        "failureMultiplier": 2,
+        "test": false
     },
     "mqtt": {
         "enable": false,
@@ -12,6 +13,11 @@
         }
     },
     "logger": {
+        "options": {
+            "level": "info",
+            "console": false,
+            "silent": false
+        },
         "all": {
             "filename": "all-%DATE%.log",
             "maxFiles": "7d"
