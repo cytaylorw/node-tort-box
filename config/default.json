@@ -8,8 +8,7 @@
         "enable": false,
         "options": {
             "host": "localhost",
-            "port": 1883,
-            "username": "tortbox"
+            "port": 1883
         }
     },
     "logger": {

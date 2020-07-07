@@ -33,6 +33,10 @@
                 "type": 22,
                 "pin": 1,
                 "interval": 2000
+            },
+            "topics": {
+                "attributes": "v1/devices/me/attributes",
+                "telemetry": "v1/devices/me/telemetry"
             }
         }
     ],
@@ -42,6 +46,10 @@
             "host": "192.168.1.141",
             "port": 62883,
             "username": "PCNUaZW1entooRtJ994f"
+        },
+        "topics": {
+            "attributes": "v1/devices/me/attributes",
+            "telemetry": "v1/devices/me/telemetry"
         }
     },
     "dht": {
