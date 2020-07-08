@@ -1,5 +1,5 @@
 # node-tort-box
-This is a project made to monitor my tortoise pet indoor enclosure. Data visualization is done by using Thingsboard platform.
+This is a project made to monitor my tortoise pet indoor enclosure. Integration with Thingsboard platform to visualize the data.
 
 ## Hardwares
 
