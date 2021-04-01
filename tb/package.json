@@ -1,0 +1,38 @@
+{
+  "name": "tort-box",
+  "version": "1.0.0",
+  "description": "node-tort-box",
+  "main": "index.js",
+  "scripts": {
+    "dev": "NODE_ENV=development node index.js",
+    "prod": "NODE_ENV=production node index.js",
+    "start": "node index.js",
+    "build-dev": "webpack --mode development",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cytaylorw/node-tort-box.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cytaylorw/node-tort-box/issues"
+  },
+  "homepage": "https://github.com/cytaylorw/node-tort-box#readme",
+  "dependencies": {
+    "async-mqtt": "^2.6.1",
+    "deepmerge": "^4.2.2",
+    "node-dht-sensor": "^0.4.2",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-node-externals": "^1.7.2"
+  }
+}
