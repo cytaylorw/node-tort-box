@@ -30,7 +30,7 @@
       "removeComments": true,
       "typeRoots": ["node_modules/@types", "src/@types"],
       "types": [
-        "mqtt-ts"
+        "mocha"
       ]
     },
     "include": ["src"]

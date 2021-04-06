@@ -59,44 +59,14 @@ export class MqttTsClient extends EventEmitter{
         resolve(connack);
       })
 
-      client.on('message', (topic: string, payload: Buffer, packet: Packet) => {
+      client.on('message', this._onMessage.bind(this));
 
-        const matched: boolean = Object.entries(this.subscribedTopics).some(([subscribedTopic, {regexString, onMessageCallback}]) => {
-          if(subscribedTopic === topic){
-            onMessageCallback(topic, payload, packet);
-            return true;
-          }
-          if(regexString){
-            const regex = new RegExp(regexString);
-            if(regex.test(topic)) {
-              onMessageCallback(topic, payload, packet);
-              return true;
-            }
-          }
-          return false;
-        })
-
-        if(matched) return;
-        this._emitError(new NoMessageCallbackError(`No callback for topic: ${topic}`));
-      })
-
-      client.on('reconnect',() => {
-        const now: number = Date.now();
-        if(now - this._retries[0] > (this.opts.keepalive ?? 60) * 1000){
-          this._retries[0] = now;
-          this._retries[1] = 1;
-        }else{
-          this._retries[1]++;
-        }
-
-        if(this._retries[1] > (this.opts.reconnectRetries ?? 4))
-          this._emitError(new TooManyRetriesError(`Too many retries (${this._retries[1]}).`));
-      })
+      client.on('reconnect', this._onReconnect.bind(this));
 
       client.on('error', (error: Error) => {
         // this._connecting = false;
         this._emitError(error);
-        this._client.end(true);
+        this._client?.end(true);
         reject(error);
       })
     })
@@ -132,12 +102,7 @@ export class MqttTsClient extends EventEmitter{
           return;
         }
 
-        if(topic.includes('#') || topic.includes('+')){
-          const regexString = '^' + topic.replace('#','.*').split('/').join('/').split('+').join('[^/]*') + '$';
-          this.subscribedTopics[topic] = {qos, onMessageCallback, regexString};
-        }else{
-          this.subscribedTopics[topic] = {qos, onMessageCallback};
-        }
+        this._addSubscribedTopic(topic, qos, onMessageCallback);
         resolve();
       })
     })
@@ -184,9 +149,50 @@ export class MqttTsClient extends EventEmitter{
   }
 
   private _emitError(error: string | Error): void {
-    if(!this.listeners('error').length) return;
+    if(!this.listeners('error').length) throw error;
     if(typeof error === 'string') error = new Error(error);
     this.emit('error', error);
+  }
+
+  private _onReconnect(): void {
+    const now: number = Date.now();
+    if(now - this._retries[0] > (this.opts.keepalive ?? 60) * 1000){
+      this._retries[0] = now;
+      this._retries[1] = 1;
+    }else{
+      this._retries[1]++;
+    }
+    if(this._retries[1] > (this.opts.reconnectRetries ?? 4))
+      this._emitError(new TooManyRetriesError(`Too many retries (${this._retries[1]}).`));
+  }
+
+  private _onMessage(topic: string, payload: Buffer, packet: Packet): void {
+    const matched: boolean = Object.entries(this.subscribedTopics).some(([subscribedTopic, {regexString, onMessageCallback}]) => {
+      if(subscribedTopic === topic){
+        onMessageCallback(topic, payload, packet);
+        return true;
+      }
+      if(regexString){
+        const regex = new RegExp(regexString);
+        if(regex.test(topic)) {
+          onMessageCallback(topic, payload, packet);
+          return true;
+        }
+      }
+      return false;
+    })
+
+    if(matched) return;
+    this._emitError(new NoMessageCallbackError(`No callback for topic: ${topic}`));
+  }
+
+  private _addSubscribedTopic(topic: string, qos: QoS, onMessageCallback: OnMessageCallback): void {
+    if(topic.includes('#') || topic.includes('+')){
+      const regexString = '^' + topic.replace('#','.*').split('/').join('/').split('+').join('[^/]*') + '$';
+      this.subscribedTopics[topic] = {qos, onMessageCallback, regexString};
+    }else{
+      this.subscribedTopics[topic] = {qos, onMessageCallback};
+    }
   }
 }
 

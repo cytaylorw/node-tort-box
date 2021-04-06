@@ -1,7 +1,9 @@
 module.exports = {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "node": true,
+        "mocha": true
     },
     "extends": [
         "eslint:recommended",
@@ -13,7 +15,7 @@ module.exports = {
         "sourceType": "module"
     },
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint", '@typescript-eslint', 'mocha'
     ],
     "rules": {
     }
