@@ -19,19 +19,25 @@ let signalsHandler: readline.Interface | NodeJS.Process = process.platform === "
 //     process.kill(process.pid, 'SIGKILL');
 // })
 
-  process
-  .on('exit', () => {
-      console.log('Received exit signal');
-  });
+process
+.on('exit', () => {
+    console.log('Received exit signal');
+});
 
 export function sigint() {
     // the original decorator
     return function actualDecorator(target: Object, property: string | symbol, descriptor: TypedPropertyDescriptor<any>): void {
 
         signalsHandler.on('SIGINT', async () => {
+            console.log('Shutting down...');
             await descriptor.value();
             process.kill(process.pid, 'SIGINT');
             // process.exit(0);
         });
     }
+}
+
+export function closeSignalHandler(){
+    (signalsHandler as readline.Interface)?.close();
+    signalsHandler?.removeAllListeners();
 }

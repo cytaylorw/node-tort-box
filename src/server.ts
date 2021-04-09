@@ -11,7 +11,7 @@ import { config } from './configuration';
 // import { subscriptions } from './subscription';
 // import { loadCache } from './cache';
 // import logger from './logger';
-import { sigint } from './signals';
+import { sigint, closeSignalHandler } from './signals';
 
 // import { MqttOptions } from './@types/mqtt-ts';
 
@@ -42,9 +42,9 @@ class Server{
 
     @sigint()
     public shutdown(): Promise<any> {
-        console.log('Shutting down...');
         return Promise.all([
-            mqttMgr.end()
+            mqttMgr.end(),
+            closeSignalHandler()
         ])
     }
 
