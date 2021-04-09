@@ -17,8 +17,9 @@ export interface MqttOptions extends IClientOptions {
 }
 
 export interface MqttTopicInfo {
+  topic: string,
   qos: QoS
-  onMessageCallback: OnMessageCallback,
+  onMessageCallback: MiddlewareCallback,
   regexString?: string
 }
 
@@ -30,3 +31,28 @@ export interface MqttTopicList {
 //   on(event: 'error', listener: (error: Error) => void): this;
 //   on(event: string, listener: Function): this;
 // }
+
+export type MqttClientName = 'all' | string;
+
+
+export interface MqttMessage {
+  topic: string;
+  payload: Buffer;
+  packet: Packet;
+  topicInfo: MqttTopicInfo;
+  [key:string]: any
+}
+
+export interface MqttConfig {
+  names?: string[];
+  [key:string]: any
+}
+
+export interface MqttSubscription {
+  name: string;
+  topic: string;
+  qos: QoS;
+  callback: MiddlewareCallback;
+}
+
+export type MiddlewareCallback = (message: MqttMessage) => void;

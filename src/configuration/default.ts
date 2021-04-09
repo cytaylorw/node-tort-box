@@ -1,4 +1,4 @@
-import { MqttOptions } from '../@types/mqtt-ts';
+import { MqttOptions, MqttConfig } from '../@types/mqtt-ts';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -7,10 +7,9 @@ dotenv.config();
 const config: {[topic: string]:any} = {
 }
 
-const mqttConfig: {[name: string]: MqttOptions} = {};
+const mqttConfig: MqttConfig = {};
 
-const setMqttConfig = (name: string): MqttOptions => {
-  const upperName = name.toUpperCase();
+const setMqttConfig = (upperName: string): MqttOptions => {
   const options: {[topic: string]: any} = {
     protocol: (process.env[upperName + '_PROTOCOL'] ?? "mqtt"),
     port: parseInt(process.env[upperName + '_PORT'] ?? '1883'),
@@ -27,13 +26,17 @@ const setMqttConfig = (name: string): MqttOptions => {
   return options as MqttOptions;
 }
 
-if(process.env.MQTT1_ENABLE === 'true'){
-  mqttConfig['mqtt1'] = setMqttConfig('mqtt1');
+if(process.env.MQTT_NAMES){
+  const names = process.env.MQTT_NAMES.replace(/\s/g,'').split(',');
+  mqttConfig['names'] = names;
+  names.forEach(name => {
+    const upperName = name.toUpperCase();
+    if(process.env[upperName + '_ENABLE'] === 'true'){
+      mqttConfig[name] = setMqttConfig(upperName);
+    }
+  })
 }
 
-if(process.env.MQTT2_ENABLE === 'true'){
-  mqttConfig['mqtt2'] = setMqttConfig('mqtt2');
-}
 
 // console.log(mqttConfig);
 export {
