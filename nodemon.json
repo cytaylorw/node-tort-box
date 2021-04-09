@@ -1,6 +1,7 @@
-{ 
-    "watch": ["src/*.ts", "src/**/*.ts", "src/config/*.json", "tsconfig.json"], 
+{
+    "watch": ["src/*.ts", "src/**/*.ts", "src/config/*.json", "tsconfig.json"],
     "ext": "ts,json",
-    "ignore": ["src/**/*.spec.ts"], 
-    "exec": "node -r ts-node/register --max-old-space-size=3049 ./src/index.ts" 
+    "ignore": ["src/**/*.spec.ts"],
+    "exec": "node -r ts-node/register --max-old-space-size=3049 ./src/index.ts",
+    "signal": ["SIGINT"]
 }
