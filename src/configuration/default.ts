@@ -1,8 +1,11 @@
 import { MqttOptions, MqttConfig } from '../@types/mqtt-ts';
 
 import dotenv from 'dotenv';
-dotenv.config();
-
+const envOpts = {
+  path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : undefined
+}
+dotenv.config(envOpts);
+console.log('.env file loaded: ' + JSON.stringify(envOpts));
 
 const config: {[topic: string]:any} = {
 }
@@ -22,6 +25,7 @@ const setMqttConfig = (upperName: string): MqttOptions => {
     connectTimeout: parseInt(process.env[upperName + '_CONNECT_TIMEOUT'] ?? '30000'),
     rejectUnauthorized: (process.env[upperName + '_REJECT_UNAUTHORIZED'] ?? 'false').toLowerCase() === 'true',
     resubscribe: (process.env[upperName + '_RESUBSCRIBE'] ?? 'true').toLowerCase() === 'true',
+    middleware: process.env[upperName + '_MIDDLEWARE']?.split(',')
   };
   return options as MqttOptions;
 }

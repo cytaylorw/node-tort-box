@@ -6,7 +6,8 @@ import {
 } from "../@types/mqtt-ts";
 import { MqttTsClient } from "./mqtt-client";
 import { mqttConfig } from "../configuration";
-import { AlreadySubscribedError } from "./errors";
+import { AlreadySubscribedError, ClientNotDefinedError } from "./errors";
+import { middleware as defaultMiddleware} from './middleware'
 
 export class MqttManager {
   private static _instance: MqttManager;
@@ -28,7 +29,7 @@ export class MqttManager {
     const promises: Promise<any>[] = [];
     const clients = this._getClients(name);
 
-    clients.forEach((client) => {
+    clients.forEach(([name, client]) => {
       promises.push(client.connect());
     });
 
@@ -39,7 +40,7 @@ export class MqttManager {
     const promises: Promise<any>[] = [];
     const clients = this._getClients(name);
 
-    clients.forEach((client) => {
+    clients.forEach(([name, client]) => {
       promises.push(client.reconnect());
     });
 
@@ -50,18 +51,24 @@ export class MqttManager {
     const promises: Promise<any>[] = [];
     const clients = this._getClients(name);
 
-    clients.forEach((client) => {
+    clients.forEach(([name, client]) => {
       promises.push(client.end());
     });
 
     return Promise.all(promises);
   }
 
-  public addMiddleware(middleware: MiddlewareCallback, name?: string): void {
+  public addMiddleware(middleware?: MiddlewareCallback, name?: string): void {
     const clients = this._getClients(name);
 
-    clients.forEach((client) => {
-      client.addMiddleware(middleware);
+    clients.forEach(([name, client]) => {
+      if(middleware){
+        client.addMiddleware(middleware);
+      }else{
+        this.config[name].middleware.forEach((cbName: string) => {
+          if(defaultMiddleware[cbName]) client.addMiddleware(defaultMiddleware[cbName]);
+        })
+      }
     });
   }
 
@@ -93,10 +100,14 @@ export class MqttManager {
     name?: string
   ): void {
     if (name) {
+      if(!this.clients[name]){
+        throw new ClientNotDefinedError(name);
+      }
+
       this.clients[name].publish(topic, message, opts);
     } else {
       this.config.names?.forEach((name) => {
-        if (this.config[name]) {
+        if (this.clients[name]) {
           this.clients[name].publish(topic, message, opts);
         }
       });
@@ -106,6 +117,10 @@ export class MqttManager {
   public subscribeAll(): Promise<any[] | void> {
     const promises: Promise<any>[] = [];
     this.subscriptions.forEach(({ name, topic, qos, callback }) => {
+      if(!this.clients[name]){
+        throw new ClientNotDefinedError(name);
+      }
+
       promises.push(this.clients[name].subscribe(topic, qos, callback));
     });
 
@@ -119,6 +134,10 @@ export class MqttManager {
   public unsubscribeAll(): Promise<any[]> {
     const promises: Promise<any>[] = [];
     this.subscriptions.forEach(({ name, topic, qos, callback }) => {
+      if(!this.clients[name]){
+        throw new ClientNotDefinedError(name);
+      }
+
       promises.push(this.clients[name].unsubscribe(topic));
     });
 
@@ -130,9 +149,15 @@ export class MqttManager {
     return new MqttManager(config);
   }
 
-  private _getClients(name?: string): MqttTsClient[] {
-    return name && this.clients[name]
-      ? [this.clients[name]]
-      : Object.values(this.clients);
+  private _getClients(name?: string):[string, MqttTsClient][] {
+    if(name) {
+      if(!this.clients[name]){
+        throw new ClientNotDefinedError(name);
+      }
+      return [[name, this.clients[name]]];
+    }else{
+      return Object.entries(this.clients);
+    }
+
   }
 }

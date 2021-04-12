@@ -14,6 +14,7 @@ export interface MqttOptions extends IClientOptions {
   connectTimeout?: number;
   rejectUnauthorized?: boolean;
   resubscribe?: boolean;
+  middleware?: string[];
 }
 
 export interface MqttTopicInfo {

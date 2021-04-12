@@ -8,7 +8,7 @@ import {
 
 import { config } from './configuration';
 
-// import { subscriptions } from './subscription';
+import './subscription';
 // import { loadCache } from './cache';
 // import logger from './logger';
 import { sigint, closeSignalHandler } from './signals';
@@ -36,7 +36,8 @@ class Server{
     public async start(): Promise<any> {
         return Promise.all([
             // this._startDbTasks(),
-            mqttMgr.subscribeAll()
+            mqttMgr.subscribeAll(),
+            mqttMgr.addMiddleware()
         ])
     }
 

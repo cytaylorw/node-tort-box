@@ -23,6 +23,7 @@ export function addSubscription(topic: string, qos: QoS, name: MqttClientName, )
     descriptor: TypedPropertyDescriptor<any>
   ): void {
     mqttMgr.addSubscription(topic, qos, descriptor.value, name, );
+    console.log('subscribed to ' + topic);
   };
 }
 

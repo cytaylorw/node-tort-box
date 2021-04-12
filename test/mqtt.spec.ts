@@ -223,7 +223,8 @@ describe('MqttManager', () => {
         mqtt1: {
             protocol: "mqtt",
             port: '9001',
-            host: 'localhost'
+            host: 'localhost',
+            middleware: ['parseToMessage']
         }
     }
 
@@ -271,6 +272,13 @@ describe('MqttManager', () => {
     it('should add middleware to all clients', function() {
 
         mqttMgr.addMiddleware(middleware.parseToMessage);
+        expect(mqttMgr.clients.mqtt1.middleware[mqttMgr.clients.mqtt1.middleware.length - 1]).to.be.equal(middleware.parseToMessage);
+
+    })
+
+    it('should add middleware from config', function() {
+
+        mqttMgr.addMiddleware();
         expect(mqttMgr.clients.mqtt1.middleware[mqttMgr.clients.mqtt1.middleware.length - 1]).to.be.equal(middleware.parseToMessage);
 
     })
